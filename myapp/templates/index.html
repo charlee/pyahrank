@@ -1,0 +1,13 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+请选择服务器
+
+<ul>
+{% for realm in realms %}
+  <li>{{ realm.name }} <a href="/{{ realm.name }}/alliance">联盟</a> <a href="/{{ realm.name }}/horde">部落</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

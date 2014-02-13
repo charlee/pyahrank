@@ -1,7 +1,6 @@
 # -*- coding: utf8 -*-
 
 import json
-import httplib
 from myapp.core.api import WowApi
 from myapp.core.db import get_realms, set_realms, get_all_item_ids, get_queued_item_ids, request_item, add_price
 
@@ -28,7 +27,7 @@ def request_auctions_file_url(api):
 def get_auctions(api, url, lastModified):
   
   print 'loading auctions file from %s...' % api.realm['name'].encode('utf-8')
-  res = api.get_content(url)
+  res = api.get_content(url, cache=True)
   data = json.loads(res)
 
   print "data download completed"
@@ -68,12 +67,16 @@ def process_ah(auctions, faction, realm_id, lastModified):
     # write back
     items[auction['item']] = item;
 
+  existing_item_ids = get_all_item_ids()
   
   for item_id, item in items.iteritems():
-    (average, quantity) = calculate_average_without_outliers(item['price'])
+    if item['price']:
+      (average, quantity) = calculate_average_without_outliers(item['price'])
 
-    # write to db
-    add_price(realm_id, faction, item_id, lastModified, average, quantity)
+      # write to db
+      add_price(realm_id, faction, item_id, lastModified, average, quantity)
+      if item_id not in existing_item_ids:
+        request_item(item_id)
 
 
 def calculate_average_without_outliers(prices):
@@ -95,12 +98,6 @@ def calculate_average_without_outliers(prices):
     this_qty = max(0, min(qty + prices[price], end) - max(qty, start) + 1)
     total_price += this_qty * price;
     qty += prices[price]
-
-
-  if (end - start + 1) == 0:
-    print "end = %s, start=%s, total_qty=%s" % (end, start, total_qty)
-
-  
 
   average = int(round(total_price) / (end - start + 1))
 

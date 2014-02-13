@@ -1,8 +1,9 @@
 # -*- coding: utf8 -*-
 
 import json
-import urllib2
+import requests
 import gzip
+from myapp.core.cache import get_cached_content, set_cached_content
 from StringIO import StringIO
 
 class WowApi:
@@ -16,19 +17,19 @@ class WowApi:
     return 'http://%s/api/wow/%s' % (self.server, part)
 
 
-  def get_content(self, url):
+  def get_content(self, url, cache=False):
 
-    req = urllib2.Request(url)
-    req.add_header('Accept-encoding', 'gzip')
-    res = urllib2.urlopen(req)
+    if cache:
+      data = get_cached_content(url)
+      if data is not None:
+        return data
 
-    if res.info().get('Content-Encoding') == 'gzip':
-      buf = StringIO(res.read())
-      f = gzip.GzipFile(fileobj=buf)
-      data = f.read()
+    r = requests.get(url)
+    data = r.content
 
-    else:
-      data = res.read()
+    # cache content if needed
+    if cache:
+      set_cached_content(url, data)
     
     return data
     

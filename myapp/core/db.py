@@ -24,10 +24,16 @@ def get_item(item_id):
   fields = [
     'id',
     'name',
-    'item_class',
-    'item_subclass'
+    'itemClass',
+    'itemSubClass',
+    'quality',
+    'inventoryType',
+    'buyPrice',
+    'sellPrice',
   ]
-  return rds.hmget(_key('item:%s', item_id), fields)
+  res = rds.hmget(_key('item:%s', item_id), fields)
+
+  return dict(zip(fields, map(lambda x:x.decode('utf-8'), res)))
 
 def get_all_item_ids():
   return rds.lrange(_key('items:list'), 0, -1);
@@ -38,11 +44,11 @@ def get_queued_item_ids():
 def populate_item(item):
   item_id = item['id']
   rds.hmset(_key('item:%s', item_id), item)     # populate item content
-  rds.lrem(_key('items:queue'), item_id)        # remove it from queue
+  rds.lrem(_key('items:queue'), 1, item_id)        # remove it from queue
   rds.rpush(_key('items:list'), item_id)        # and add it to items list
 
 def request_item(item_id):
-  rds.rpush(_key('items:list'), item_id)        # push it to queue
+  rds.rpush(_key('items:queue'), item_id)        # push it to queue
 
 
 
