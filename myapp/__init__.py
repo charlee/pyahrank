@@ -4,24 +4,11 @@ import os
 import redis
 import time
 from flask import Flask, render_template, g
-from flask.ext.scss import Scss
-from flask.ext.csrf import csrf
-from flask.ext.bcrypt import Bcrypt
-from flask.ext.coffee2js import coffee2js
 
 # init global vars
 
 app = Flask(__name__)
 app.config.from_object('config')
-
-# auto convert scss and coffee only in dev env
-if app.debug:
-  Scss(app)
-  coffee2js(app, coffee_folder=os.path.join(app.root_path, 'assets/coffee'))
-
-csrf(app)
-
-bcrypt = Bcrypt(app)
 
 # set app secret key for session
 app.secret_key = 'xnrMPl.f$)wjqt2mE`%O+GBEWv9Ill#qog`HS3VSw!Smz$v.!%RWvTOW`JS#@28n';
