@@ -4,6 +4,7 @@ import os
 import redis
 import time
 from flask import Flask, render_template, g
+from werkzeug.routing import BaseConverter
 
 # init global vars
 
@@ -18,6 +19,13 @@ rds = redis.StrictRedis(host=app.config['REDIS_HOST'],
                         db=app.config['REDIS_DB'],
                         password=app.config['REDIS_PASSWORD'])
 
+
+class RegexConverter(BaseConverter):
+  def __init__(self, url_map, *items):
+    super(RegexConverter, self).__init__(url_map)
+    self.regex = items[0]
+
+app.url_map.converters['regex'] = RegexConverter
 
 # import views
 

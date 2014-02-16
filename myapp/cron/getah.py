@@ -88,7 +88,7 @@ def calculate_average_without_outliers(prices):
   price_list.sort()
 
   start = round(total_qty / 10) if total_qty >= 10 else 1
-  end = round(total_qty * 9 / 10) if total_qty >= 10 else total_qty
+  end = round(total_qty * 5 / 10) if total_qty >= 10 else total_qty
 
 
   qty = 0           # acdtually qty is a counter indicates where we are in the prices

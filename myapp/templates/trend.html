@@ -3,5 +3,36 @@
 {% block content %}
 <h2>{{ realm }} - {{ faction }}</h2>
 
+<p>常用物品</p>
+<ul>
+  <li><a href="/{{ realm }}/{{ faction_name }}/72988,53010,33470,21877,14047,4338,4306,2592,2589">布料</a></li>
+  <li><a href="/{{ realm }}/{{ faction_name }}/72092,72096,72094,72103,72095,72104,52185,52186,53039,53038,54849">金属与矿石</a></li>
+  <li><a href="/{{ realm }}/{{ faction_name }}/72238,79011,79010,72235,72234,72237">草药</a></li>
+  <li><a href="/{{ realm }}/{{ faction_name }}/74248,74247,74252,74250,74251,74249">附魔材料</a></li>
+</ul>
+
+<table border=1>
+  <tr>
+    <th>物品ID</th>
+    <th>物品名</a></th>
+    <th>平均价格</th>
+    <th>数量</th>
+    <th>分类</th>
+    <th>最后更新</th>
+  </tr>
+
+  {% for item in items %}
+  <tr>
+    <td>{{ item.id }}</td>
+    <td><a href="http://db.178.com/wow/cn/item/{{ item.id }}.html" class="item-{{ item.quality }}">{{ item.name }}</a></td>
+    <td>{{ item.price_g}}g{{ item.price_s}}s{{ item.price_c}}c</td>
+    <td>{{ item.quantity }}</td>
+    <td>{{ item.itemClass }} - {{ item.itemSubClass }}</td>
+    <td>{{ item.lastUpdate }}</td>
+  </tr>
+  {% endfor %}
+
+</table>
+
 
 {% endblock %}

@@ -51,7 +51,6 @@ def request_item(item_id):
   rds.rpush(_key('items:queue'), item_id)        # push it to queue
 
 
-
 def add_price(realm_id, faction, item_id, timestamp, avg, qty):
   key = _key('price:%s:%s:%s', realm_id, faction, item_id)
   data = '%s:%s:%s' % (timestamp, avg, qty)
@@ -64,5 +63,18 @@ def get_all_prices(realm_id, faction, item_id):
 
 def get_latest_price(realm_id, faction, item_id):
   key = _key('price:%s:%s:%s', realm_id, faction, item_id)
-  return rds.lrange(key, 0, 0)
+  result = rds.lrange(key, 0, 0)
+  if result:
+    return result[0]
+  else:
+    return None
   
+def set_item_classes(item_classes):
+  key = _key('items:classes')
+  s = json.dumps(item_classes)
+  rds.set(key, s)
+
+def get_item_classes():
+  key = _key('items:classes')
+  s = rds.get(key)
+  return json.loads(s)

@@ -17,13 +17,17 @@ def populate_all_items():
 
     res = api.item(item_id)
 
-    item = {}
-    for key in ('id', 'name', 'itemClass', 'itemSubClass', 'buyPrice', 'sellPrice', 'inventoryType', 'quality'):
-      item[key] = res[key]
+    if res.get('status', '') != 'nok':
+      item = {}
+      for key in ('id', 'name', 'itemClass', 'itemSubClass', 'buyPrice', 'sellPrice', 'inventoryType', 'quality'):
+        item[key] = res[key]
 
-    print item['name']
+      print item['name']
 
-    populate_item(item)
+      populate_item(item)
+
+    else:
+      print 'FAILED, %s' % res.get('reason', 'unknown reason')
 
 
 def run():
