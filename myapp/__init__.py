@@ -4,13 +4,14 @@ import os
 import redis
 import time
 from flask import Flask, render_template, g
+from flask_environments import Environments
 from werkzeug.routing import BaseConverter
 
 # init global vars
 
 app = Flask(__name__)
-app.config.from_object('config')
-app.config.from_envvar('APP_CONFIG_ENV')
+env = Environments(app)
+env.from_object('config')
 
 # set app secret key for session
 app.secret_key = 'xnrMPl.f$)wjqt2mE`%O+GBEWv9Ill#qog`HS3VSw!Smz$v.!%RWvTOW`JS#@28n';
