@@ -2,9 +2,9 @@
 
 import re
 import os
-from config import BASEDIR
+from myapp import app
 
-CACHEDIR = os.path.join(BASEDIR, 'cache')
+CACHEDIR = os.path.join(app.config['BASEDIR'], 'cache')
 
 def _get_cache_path(url):
   
