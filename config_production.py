@@ -1,0 +1,5 @@
+DEBUG=False
+REDIS_DB=2
+
+HOST = '0.0.0.0'
+PORT = 2401

@@ -2,10 +2,11 @@
 
 import os
 
+DEBUG = True
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
-DEBUG = True
-
+HOST = '0.0.0.0'
+PORT = 8000
 
 # redis db config
 REDIS_HOST = 'localhost'

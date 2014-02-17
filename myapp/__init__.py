@@ -10,6 +10,7 @@ from werkzeug.routing import BaseConverter
 
 app = Flask(__name__)
 app.config.from_object('config')
+app.config.from_object('APP_CONFIG_ENV')
 
 # set app secret key for session
 app.secret_key = 'xnrMPl.f$)wjqt2mE`%O+GBEWv9Ill#qog`HS3VSw!Smz$v.!%RWvTOW`JS#@28n';

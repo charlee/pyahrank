@@ -5,6 +5,6 @@ from myapp import app
 
 if __name__ == '__main__':
 
-  app.run(debug=app.config['DEBUG'], host='0.0.0.0', port=8000)
+  app.run(debug=app.config['DEBUG'], host=app.config['HOST'], port=app.config['PORT'])
 
 
