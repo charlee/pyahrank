@@ -27,7 +27,7 @@ def request_auctions_file_url(api):
 def get_auctions(api, url, lastModified):
   
   print 'loading auctions file from %s...' % api.realm['name'].encode('utf-8')
-  res = api.get_content(url, cache=True)
+  res = api.get_auctions_file(url, lastModified, cache=True)
   data = json.loads(res)
 
   print "data download completed"
@@ -87,7 +87,7 @@ def process_ah(auctions, faction, realm_id, lastModified):
         if str(item_id) not in existing_item_ids:
           print "request item %s" % item_id
           request_item(item_id)
-          queue_count +=1 
+          queue_counter +=1 
 
   print "%s price(s) recorded, %s item(s) requested" % (price_counter, queue_counter)
 

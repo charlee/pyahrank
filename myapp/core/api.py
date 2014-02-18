@@ -1,5 +1,6 @@
 # -*- coding: utf8 -*-
 
+import sys
 import json
 import time
 import requests
@@ -20,22 +21,13 @@ class WowApi:
     return 'http://%s/api/wow/%s' % (self.server, part)
 
 
-  def get_content(self, url, cache=False):
-
-    if cache:
-      data = get_cached_content(url)
-      if data is not None:
-        return data
+  def get_content(self, url):
 
     retry = 0
     while retry < MAX_RETRY:
       try:
         r = requests.get(url)
         data = r.content
-
-        # cache content if needed
-        if cache:
-          set_cached_content(url, data)
 
         break
 
@@ -46,10 +38,31 @@ class WowApi:
         if retry >= MAX_RETRY:
           raise e
         
+    return data
+
+
+  def get_auctions_file(self, url, lastModified, cache=True):
     
+    data = get_cached_content(url, lastModified)
+    if data is not None:
+      return data
+
+    response = requests.get(url, stream=True)
+
+    dl = 0
+    data = ''
+    for chunk in response.iter_content():
+      dl += len(chunk)
+      data += chunk
+      sys.stdout.write("\r%sKB downloaded" % (dl / 1024) )
+      sys.stdout.flush()
+
+    # cache content if needed
+    if cache:
+      set_cached_content(url, data, lastModified)
+
     return data
     
-
   def auction(self):
     url = self._get_url('auction/data/' + self.realm['name'].encode('utf-8'))
     res = self.get_content(url)
