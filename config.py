@@ -9,6 +9,8 @@ class Config(object):
   HOST = '0.0.0.0'
   PORT = 8000
 
+  TIMEZONE = 'Asia/Shanghai'
+
   # redis db config
   REDIS_HOST = 'localhost'
   REDIS_PORT = 6379

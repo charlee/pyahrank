@@ -5,6 +5,7 @@ from myapp import app
 from myapp.core.db import get_realms, get_all_item_ids, get_item, get_latest_price, get_item_classes
 from myapp.utils.common import make_context
 from datetime import datetime
+from pytz import timezone
 
 
 def _error(msg):
@@ -51,6 +52,8 @@ def trend(realm_name, faction_name, item_list):
 
   item_classes = get_item_classes()
 
+  tz = timezone(app.config['TIMEZONE'])
+
   for item_id in item_ids:
     (timestamp, price, quantity) = get_latest_price(realm['id'], faction_name, item_id)
     if timestamp:
@@ -67,7 +70,7 @@ def trend(realm_name, faction_name, item_list):
         'price_c': price % 100,
         'quality': item and item['quality'] or '1',
         'quantity': quantity,
-        'lastUpdate': datetime.fromtimestamp(timestamp / 1000).strftime('%Y/%m/%d %H:%M'),
+        'lastUpdate': datetime.fromtimestamp(timestamp / 1000, tz).strftime('%Y/%m/%d %H:%M'),
         'itemClass': item_class,
         'itemSubClass': item_subclass,
       })
