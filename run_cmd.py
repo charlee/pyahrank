@@ -12,7 +12,7 @@ def run_cron(cmd):
 
   crontask = None
   try:
-    crontask = __import__("myapp.cron.%s" % cmd, globals(), locals(), ['run'], -1)
+    crontask = __import__("myapp.cmds.%s" % cmd, globals(), locals(), ['run'], -1)
   except ImportError as e:
     print "Cannot load Command `%s': %s" % (cmd, e)
 
