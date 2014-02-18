@@ -2,7 +2,7 @@
 
 import json
 from myapp.core.api import WowApi
-from myapp.core.db import get_realms, set_realms, get_all_item_ids, get_queued_item_ids, request_item, add_price
+from myapp.core.db import get_realms, set_realms, get_all_item_ids, get_queued_item_ids, request_item, add_price, get_latest_price
 
 
 def get_all_auctions():
@@ -67,17 +67,29 @@ def process_ah(auctions, faction, realm_id, lastModified):
     # write back
     items[auction['item']] = item;
 
-  existing_item_ids = get_all_item_ids()
+  existing_item_ids = get_all_item_ids().union(get_queued_item_ids())
+
+  price_counter = 0
+  queue_counter = 0
   
   for item_id, item in items.iteritems():
     if item['price']:
-      (average, quantity) = calculate_average_without_outliers(item['price'])
+      
+      (timestamp, price, quantity) = get_latest_price(realm_id, faction, item_id)
+      if int(timestamp) != int(lastModified):
 
-      # write to db
-      add_price(realm_id, faction, item_id, lastModified, average, quantity)
-      if str(item_id) not in existing_item_ids:
-        print "request item %s" % item_id
-        request_item(item_id)
+        (average, quantity) = calculate_average_without_outliers(item['price'])
+
+        # write to db
+        add_price(realm_id, faction, item_id, lastModified, average, quantity)
+        price_counter += 1
+
+        if str(item_id) not in existing_item_ids:
+          print "request item %s" % item_id
+          request_item(item_id)
+          queue_count +=1 
+
+  print "%s price(s) recorded, %s item(s) requested" % (price_counter, queue_counter)
 
 
 def calculate_average_without_outliers(prices):

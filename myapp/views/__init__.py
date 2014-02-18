@@ -52,10 +52,8 @@ def trend(realm_name, faction_name, item_list):
   item_classes = get_item_classes()
 
   for item_id in item_ids:
-    prices = get_latest_price(realm['id'], faction_name, item_id)
-    if prices:
-      (timestamp, price, quantity) = prices.split(':')
-      price = int(price)
+    (timestamp, price, quantity) = get_latest_price(realm['id'], faction_name, item_id)
+    if timestamp:
       item = get_item(item_id)
 
       item_class = item_classes.get(item['itemClass'], {}).get('name', '-')
@@ -69,7 +67,7 @@ def trend(realm_name, faction_name, item_list):
         'price_c': price % 100,
         'quality': item and item['quality'] or '1',
         'quantity': quantity,
-        'lastUpdate': datetime.fromtimestamp(int(timestamp) / 1000).strftime('%Y/%m/%d %H:%M'),
+        'lastUpdate': datetime.fromtimestamp(timestamp / 1000).strftime('%Y/%m/%d %H:%M'),
         'itemClass': item_class,
         'itemSubClass': item_subclass,
       })

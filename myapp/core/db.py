@@ -64,9 +64,10 @@ def get_latest_price(realm_id, faction, item_id):
   key = _key('price:%s:%s:%s', realm_id, faction, item_id)
   result = rds.lrange(key, 0, 0)
   if result:
-    return result[0]
+    (timestamp, price, quantity) = result[0].split(':')
+    return int(timestamp), int(price), int(quantity)
   else:
-    return None
+    return (0, 0, 0)
   
 def set_item_classes(item_classes):
   key = _key('items:classes')
