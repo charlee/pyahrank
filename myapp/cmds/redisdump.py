@@ -32,6 +32,10 @@ class RedisExport(object):
     self.fh.write('%s|%s|%s\n' % (key, 'hash', json.dumps(value)))
     return value
 
+  def dump_set(self, key):
+    value = rds.smembers(key)
+    self.fh.write('%s|%s|%s\n' % (key, 'set', json.dumps(list(value))))
+
 
 class RedisImport(object):
 
@@ -47,6 +51,8 @@ class RedisImport(object):
       rds.rpush(key, *(json.loads(value)))
     elif key_type == 'hash':
       rds.hmset(key, json.loads(value))
+    elif key_type == 'set':
+      rds.sadd(key, *(json.loads(values)))
 
   def import_all(self):
     fh = open(self.path)
@@ -64,8 +70,8 @@ def export_redis(path):
   rd.dump_string(_key('realms'))
   rd.dump_string(_key('items:classes'))
 
-  items_queue = rd.dump_list(_key('items:queue'))
-  items_list = rd.dump_list(_key('items:list'))
+  items_queue = rd.dump_set(_key('items:queue'))
+  items_list = rd.dump_set(_key('items:list'))
 
   for item_id in items_list:
     rd.dump_hash(_key('item:%s', item_id))

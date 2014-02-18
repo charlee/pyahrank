@@ -75,7 +75,8 @@ def process_ah(auctions, faction, realm_id, lastModified):
 
       # write to db
       add_price(realm_id, faction, item_id, lastModified, average, quantity)
-      if item_id not in existing_item_ids:
+      if str(item_id) not in existing_item_ids:
+        print "request item %s" % item_id
         request_item(item_id)
 
 

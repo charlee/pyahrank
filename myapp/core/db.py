@@ -36,19 +36,18 @@ def get_item(item_id):
   return dict(zip(fields, map(lambda x:x.decode('utf-8'), res)))
 
 def get_all_item_ids():
-  return rds.lrange(_key('items:list'), 0, -1);
+  return rds.smembers(_key('items:list'))
 
 def get_queued_item_ids():
-  return rds.lrange(_key('items:queue'), 0, -1);
+  return rds.smembers(_key('items:queue'))
 
 def populate_item(item):
   item_id = item['id']
   rds.hmset(_key('item:%s', item_id), item)     # populate item content
-  rds.lrem(_key('items:queue'), 1, item_id)        # remove it from queue
-  rds.rpush(_key('items:list'), item_id)        # and add it to items list
+  rds.smove(_key('items:queue'), _key('items:list'), item_id)   # remove it from queue and add it to items list
 
 def request_item(item_id):
-  rds.rpush(_key('items:queue'), item_id)        # push it to queue
+  rds.sadd(_key('items:queue'), item_id)        # push it to queue
 
 
 def add_price(realm_id, faction, item_id, timestamp, avg, qty):
