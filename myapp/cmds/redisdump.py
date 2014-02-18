@@ -35,6 +35,7 @@ class RedisExport(object):
   def dump_set(self, key):
     value = rds.smembers(key)
     self.fh.write('%s|%s|%s\n' % (key, 'set', json.dumps(list(value))))
+    return value
 
 
 class RedisImport(object):
@@ -48,11 +49,13 @@ class RedisImport(object):
     if key_type == 'string':
       rds.set(key, value)
     elif key_type == 'list':
-      rds.rpush(key, *(json.loads(value)))
+      for v in json.loads(value):
+        rds.rpush(key, v)
     elif key_type == 'hash':
       rds.hmset(key, json.loads(value))
     elif key_type == 'set':
-      rds.sadd(key, *(json.loads(values)))
+      for v in json.loads(value):
+        rds.sadd(key, v)
 
   def import_all(self):
     fh = open(self.path)
