@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-import sys
+import os, sys
 import json
 import time
 import requests
@@ -51,11 +51,18 @@ class WowApi:
 
     dl = 0
     data = ''
+
+    is_console = os.isatty(sys.stdout.fileno())
+
     for chunk in response.iter_content():
       dl += len(chunk)
       data += chunk
-      sys.stdout.write("\r%sKB downloaded" % (dl / 1024) )
-      sys.stdout.flush()
+      if is_console:
+        sys.stdout.write("\r%sKB downloaded" % (dl / 1024) )
+        sys.stdout.flush()
+
+    if is_console:
+      sys.stdout.write("\n")
 
     # cache content if needed
     if cache:
