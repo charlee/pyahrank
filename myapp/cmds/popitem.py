@@ -22,7 +22,7 @@ def populate_all_items():
       for key in ('id', 'name', 'itemClass', 'itemSubClass', 'buyPrice', 'sellPrice', 'inventoryType', 'quality'):
         item[key] = res[key]
 
-      print item['name']
+      print item['name'].encode('utf-8')
 
       populate_item(item)
 
