@@ -75,13 +75,13 @@ def process_ah(auctions, faction, realm_id, lastModified):
   for item_id, item in items.iteritems():
     if item['price']:
       
-      (timestamp, price, quantity) = get_latest_price(realm_id, faction, item_id)
+      (timestamp, quantity, average, min_price) = get_latest_price(realm_id, faction, item_id)
       if int(timestamp) != int(lastModified):
 
-        (average, quantity) = calculate_average_without_outliers(item['price'])
+        (quantity, average, min_price) = calculate_average_without_outliers(item['price'])
 
         # write to db
-        add_price(realm_id, faction, item_id, lastModified, average, quantity)
+        add_price(realm_id, faction, item_id, lastModified, quantity, average, min_price)
         price_counter += 1
 
         if str(item_id) not in existing_item_ids:
@@ -96,7 +96,7 @@ def calculate_average_without_outliers(prices):
   
 
   total_qty = sum(prices.values())
-  price_list = prices.keys()
+  price_list = map(int, prices.keys())
 
   price_list.sort()
 
@@ -113,8 +113,9 @@ def calculate_average_without_outliers(prices):
     qty += prices[price]
 
   average = int(round(total_price) / (end - start + 1))
+  min_price = price_list[0]
 
-  return (average, total_qty)
+  return (total_qty, average, min_price)
 
 
 

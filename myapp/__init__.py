@@ -29,10 +29,11 @@ class RegexConverter(BaseConverter):
 
 app.url_map.converters['regex'] = RegexConverter
 
+
 # import views
 
 import myapp.views
-
+import myapp.views.filters
 
 # common handlers
 

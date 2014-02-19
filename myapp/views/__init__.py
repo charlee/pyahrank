@@ -55,7 +55,7 @@ def trend(realm_name, faction_name, item_list):
   tz = timezone(app.config['TIMEZONE'])
 
   for item_id in item_ids:
-    (timestamp, price, quantity) = get_latest_price(realm['id'], faction_name, item_id)
+    (timestamp, quantity, average, min_price) = get_latest_price(realm['id'], faction_name, item_id)
     if timestamp:
       item = get_item(item_id)
 
@@ -65,11 +65,10 @@ def trend(realm_name, faction_name, item_list):
       items.append({
         'id': item_id,
         'name': item and item['name'] or '(未知)',
-        'price_g': price / 10000,
-        'price_s': (price % 10000) / 100,
-        'price_c': price % 100,
-        'quality': item and item['quality'] or '1',
+        'average': average,
+        'min_price': min_price,
         'quantity': quantity,
+        'quality': item and item['quality'] or '1',
         'lastUpdate': datetime.fromtimestamp(timestamp / 1000, tz).strftime('%Y/%m/%d %H:%M'),
         'itemClass': item_class,
         'itemSubClass': item_subclass,

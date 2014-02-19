@@ -16,6 +16,7 @@
     <th>物品ID</th>
     <th>物品名</a></th>
     <th>平均价格</th>
+    <th>最小价格</th>
     <th>数量</th>
     <th>分类</th>
     <th>最后更新</th>
@@ -25,7 +26,8 @@
   <tr>
     <td>{{ item.id }}</td>
     <td><a href="http://db.178.com/wow/cn/item/{{ item.id }}.html" class="item-{{ item.quality }}">{{ item.name }}</a></td>
-    <td>{{ item.price_g}}g{{ item.price_s}}s{{ item.price_c}}c</td>
+    <td>{{ item.average|pretty_price }}</td>
+    <td>{{ item.min_price|pretty_price }}</td>
     <td>{{ item.quantity }}</td>
     <td>{{ item.itemClass }} - {{ item.itemSubClass }}</td>
     <td>{{ item.lastUpdate }}</td>

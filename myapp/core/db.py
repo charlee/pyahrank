@@ -50,9 +50,9 @@ def request_item(item_id):
   rds.sadd(_key('items:queue'), item_id)        # push it to queue
 
 
-def add_price(realm_id, faction, item_id, timestamp, avg, qty):
+def add_price(realm_id, faction, item_id, timestamp, qty, avg, min_price):
   key = _key('price:%s:%s:%s', realm_id, faction, item_id)
-  data = '%s:%s:%s' % (timestamp, avg, qty)
+  data = '%s:%s:%s:%s' % (timestamp, qty, avg, min_price)
   rds.lpush(key, data)
 
 
@@ -64,10 +64,10 @@ def get_latest_price(realm_id, faction, item_id):
   key = _key('price:%s:%s:%s', realm_id, faction, item_id)
   result = rds.lrange(key, 0, 0)
   if result:
-    (timestamp, price, quantity) = result[0].split(':')
-    return int(timestamp), int(price), int(quantity)
+    (timestamp, qty, avg, min_price) = result[0].split(':')
+    return int(timestamp), int(qty), int(avg), int(min_price)
   else:
-    return (0, 0, 0)
+    return (0, 0, 0, 0)
   
 def set_item_classes(item_classes):
   key = _key('items:classes')
