@@ -8,9 +8,9 @@ def pretty_price(value):
   c = value % 100
 
   value = ''
-  if g: value += str(g) + 'g'
-  if s: value += str(s) + 's'
-  value += str(c) + 'c'
+  if g: value += str(g) + '.'
+  if s: value += str(s) + '.'
+  value += str(c)
 
   return value
 

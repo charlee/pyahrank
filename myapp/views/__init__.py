@@ -67,6 +67,7 @@ def trend(realm_name, faction_name, item_list):
         'name': item and item['name'] or '(未知)',
         'average': average,
         'min_price': min_price,
+        'sell_price': item and item['sellPrice'],
         'quantity': quantity,
         'quality': item and item['quality'] or '1',
         'lastUpdate': datetime.fromtimestamp(timestamp / 1000, tz).strftime('%Y/%m/%d %H:%M'),
