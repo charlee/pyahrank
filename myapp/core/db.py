@@ -70,11 +70,33 @@ def get_latest_price(realm_id, faction, item_id):
     return (0, 0, 0, 0)
   
 def set_item_classes(item_classes):
+  """
+  Set the item classes
+  """
   key = _key('items:classes')
   s = json.dumps(item_classes)
   rds.set(key, s)
 
 def get_item_classes():
+  """
+  Returns the item classes
+  """
   key = _key('items:classes')
   s = rds.get(key)
-  return json.loads(s)
+  try:
+    o = json.loads(s)
+  except (TypeError, ValueError):
+    o = {}
+
+  return o
+
+
+def classify_item(item):
+  """
+  Put specified item to corresponding item list
+  """
+
+  if item['itemClass'].isdigit() and item['itemSubClass'].isdigit():
+    key = _key('items:class.%s.%s', item['itemClass'], item['itemSubClass'])
+    rds.sadd(key, item['id'])
+    

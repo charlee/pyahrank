@@ -10,11 +10,11 @@
     <ul>
     {% for cls in item_classes %}
       <li data-toggle="collapse" data-target="#item-class-{{ cls.id }}">
-        <a href="/{{ realm }}/{{ faction_name }}/items/{{ cls.id }}">{{ cls.name }}</a>
+        <a href="/{{ realm }}/{{ faction_name }}/class/{{ cls.id }}">{{ cls.name }}</a>
       </li>
       <ul class="collapse" id="item-class-{{ cls.id }}">
       {% for subcls in cls.subclasses %}
-        <li><a href="/{{ realm }}/{{ faction_name }}/items/{{ cls.id }}.{{ subcls.id }}">{{ subcls.name }}</a></li>
+        <li><a href="/{{ realm }}/{{ faction_name }}/class/{{ cls.id }}.{{ subcls.id }}">{{ subcls.name }}</a></li>
       {% endfor %}
       </ul>
     {% endfor %}

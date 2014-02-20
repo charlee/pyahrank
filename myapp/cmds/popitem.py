@@ -26,6 +26,8 @@ def populate_all_items():
 
       populate_item(item)
 
+      classify_item(item)
+
     else:
       print 'FAILED, %s' % res.get('reason', 'unknown reason')
 
