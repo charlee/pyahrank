@@ -5,6 +5,22 @@
 
 <div class="row">
   <div class="col-md-3">
+
+    <div class="item-classes" id="item-classes">
+    <ul>
+    {% for cls in item_classes %}
+      <li data-toggle="collapse" data-target="#item-class-{{ cls.id }}">
+        <a href="/{{ realm }}/{{ faction_name }}/items/{{ cls.id }}">{{ cls.name }}</a>
+      </li>
+      <ul class="collapse" id="item-class-{{ cls.id }}">
+      {% for subcls in cls.subclasses %}
+        <li><a href="/{{ realm }}/{{ faction_name }}/items/{{ cls.id }}.{{ subcls.id }}">{{ subcls.name }}</a></li>
+      {% endfor %}
+      </ul>
+    {% endfor %}
+    </ul>
+    </div>
+
     <p>常用物品</p>
     <ul>
       <li><a href="/{{ realm }}/{{ faction_name }}/72988,53010,33470,21877,14047,4338,4306,2592,2589">布料</a></li>

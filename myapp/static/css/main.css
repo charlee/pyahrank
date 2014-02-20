@@ -8,6 +8,15 @@ a {
   outline: none;
 }
 
+a:link {
+  color: #FFD100;
+}
+
+a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
 .q0 { color: #9d9d9d !important; }
 .q1 { color: #fff !important; }
 .q2 { color: #1eff00 !important; }
@@ -48,4 +57,36 @@ a {
 
 .items-table td.numbers {
   text-align: right;
+}
+
+.item-classes ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item-classes li {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.item-classes>ul>li {
+  background: #585858;
+  border: solid 1px #404040;
+  border-top-width: 0;
+  cursor: pointer;
+}
+
+.item-classes>ul>li>a {
+  padding-left: 10px;
+}
+
+.item-classes>ul>ul>li {
+  background: #000;
+  border: solid 1px #404040;
+  border-top-width: 0;
+}
+
+.item-classes>ul>ul>li>a {
+  padding-left: 20px;
 }

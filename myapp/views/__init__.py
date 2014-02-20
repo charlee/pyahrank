@@ -80,7 +80,30 @@ def trend(realm_name, faction_name, item_list):
     'realm': realm['name'],
     'faction_name': faction_name,
     'faction': faction,
-    'items': items
+    'items': items,
+    'item_classes': format_item_classes(item_classes),
   })
 
   return render_template('trend.html', **context)
+
+
+def format_item_classes(item_classes):
+  """ make item classes a better format for template output"""
+  ret = []
+
+  for clsid in sorted(item_classes.keys(), key=int):
+    cls = {
+      'id': clsid,
+      'name': item_classes[str(clsid)]['name'],
+      'subclasses': [],
+    }
+
+    for subclsid in sorted(filter(lambda x:x.isdigit(), item_classes[str(clsid)].keys()), key=int):
+      cls['subclasses'].append({
+        'id': subclsid,
+        'name': item_classes[str(clsid)][str(subclsid)],
+      })
+
+    ret.append(cls)
+
+  return ret
