@@ -2,11 +2,14 @@
 
 from flask import render_template, session
 from myapp import app
-from myapp.core.db import get_realms, get_all_item_ids, get_item, get_latest_price, get_item_classes
-from myapp.utils.common import make_context
+from myapp.core.db import get_realms, get_all_item_ids, get_item, get_latest_price, get_item_classes, get_realm_by_name
+from myapp.utils.common import make_context, check_faction, parse_classinfo
 from datetime import datetime
 from pytz import timezone
 
+from .api import api
+
+app.register_blueprint(api, url_prefix='/api')
 
 def _error(msg):
 
@@ -28,59 +31,51 @@ def index():
 
 
 
-@app.route('/<realm_name>/<faction_name><regex("(/[0-9,]*)?"):item_list>')
-def trend(realm_name, faction_name, item_list):
+@app.route('/p/<realm_name>/<faction_id><regex("(/[0-9,]*)?"):item_list>')
+def price_list(realm_name, faction_id, item_list):
 
-  realms = get_realms()
-
-  realms = filter(lambda x:x['name'] == realm_name, realms)
-
-  if len(realms) < 1:
+  realm = get_realm_by_name(realm_name)
+  if realm is None:
     return _error(u"未找到服务器!")
 
-  if faction_name not in ('alliance', 'horde'):
+  faction = check_faction(faction_id)
+
+  if faction is None:
     return _error(u"阵营错误!")
 
 
-  # start to get prices
-  realm = realms[0]
-  faction = u'联盟' if faction_name == 'alliance' else u'部落'
-
-  item_ids = item_list[1:].split(',')
-
-  items = []
+  item_ids = map(int,item_list[1:].split(','))
 
   item_classes = get_item_classes()
 
-  tz = timezone(app.config['TIMEZONE'])
-
-  for item_id in item_ids:
-    (timestamp, quantity, average, min_price) = get_latest_price(realm['id'], faction_name, item_id)
-    if timestamp:
-      item = get_item(item_id)
-
-      item_class = item_classes.get(item['itemClass'], {}).get('name', '-')
-      item_subclass = item_classes.get(item['itemClass'], {}).get(item['itemSubClass'], '-')
-
-      items.append({
-        'id': item_id,
-        'name': item and item['name'] or '(未知)',
-        'average': average,
-        'min_price': min_price,
-        'sell_price': item and item['sellPrice'],
-        'quantity': quantity,
-        'quality': item and item['quality'] or '1',
-        'lastUpdate': datetime.fromtimestamp(timestamp / 1000, tz).strftime('%Y/%m/%d %H:%M'),
-        'itemClass': item_class,
-        'itemSubClass': item_subclass,
-      })
-
-  
   context = make_context({
-    'realm': realm['name'],
-    'faction_name': faction_name,
+    'realm': realm,
     'faction': faction,
-    'items': items,
+    'item_ids': item_ids,
+    'item_classes': format_item_classes(item_classes),
+  })
+
+  return render_template('trend.html', **context)
+
+
+@app.route('/s/<realm_name>/<faction_id><regex("(/.*)?"):class_tag>')
+def price_search(realm_name, faction_id, class_tag):
+
+  realm = get_realm_by_name(realm_name)
+  if realm is None:
+    return _error(u"未找到服务器!")
+
+  faction = check_faction(faction_id)
+
+  if faction is None:
+    return _error(u"阵营错误!")
+
+  item_classes = get_item_classes()
+
+  context = make_context({
+    'realm': realm,
+    'faction': faction,
+    'cls': class_tag[1:],
     'item_classes': format_item_classes(item_classes),
   })
 

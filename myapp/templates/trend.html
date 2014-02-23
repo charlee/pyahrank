@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-<h2>{{ realm }} - {{ faction }}</h2>
+<h2>{{ realm.name }} - {{ faction.name }}</h2>
 
 <div class="row">
   <div class="col-md-3">
@@ -10,11 +10,11 @@
     <ul>
     {% for cls in item_classes %}
       <li data-toggle="collapse" data-target="#item-class-{{ cls.id }}">
-        <a href="/{{ realm }}/{{ faction_name }}/class/{{ cls.id }}">{{ cls.name }}</a>
+        <a href="/s/{{ realm.name }}/{{ faction.id }}/{{ cls.id }}">{{ cls.name }}</a>
       </li>
       <ul class="collapse" id="item-class-{{ cls.id }}">
       {% for subcls in cls.subclasses %}
-        <li><a href="/{{ realm }}/{{ faction_name }}/class/{{ cls.id }}.{{ subcls.id }}">{{ subcls.name }}</a></li>
+        <li><a href="/s/{{ realm.name }}/{{ faction.id }}/{{ cls.id }}.{{ subcls.id }}">{{ subcls.name }}</a></li>
       {% endfor %}
       </ul>
     {% endfor %}
@@ -23,16 +23,16 @@
 
     <p>常用物品</p>
     <ul>
-      <li><a href="/{{ realm }}/{{ faction_name }}/72988,53010,33470,21877,14047,4338,4306,2592,2589">布料</a></li>
-      <li><a href="/{{ realm }}/{{ faction_name }}/72092,72096,72094,72103,72095,72104,52185,52186,53039,53038,54849">金属与矿石</a></li>
-      <li><a href="/{{ realm }}/{{ faction_name }}/72238,79011,79010,72235,72234,72237">草药</a></li>
-      <li><a href="/{{ realm }}/{{ faction_name }}/74248,74247,74252,74250,74251,74249">附魔材料</a></li>
+      <li><a href="/p/{{ realm.name }}/{{ faction.id }}/72988,53010,33470,21877,14047,4338,4306,2592,2589">布料</a></li>
+      <li><a href="/p/{{ realm.name }}/{{ faction.id }}/72092,72096,72094,72103,72095,72104,52185,52186,53039,53038,54849">金属与矿石</a></li>
+      <li><a href="/p/{{ realm.name }}/{{ faction.id }}/72238,79011,79010,72235,72234,72237">草药</a></li>
+      <li><a href="/p/{{ realm.name }}/{{ faction.id }}/74248,74247,74252,74250,74251,74249">附魔材料</a></li>
     </ul>
   </div>
 
   <div class="col-md-9">
 
-    <table class="items-table">
+    <table class="items-table" id="items-table">
       <thead>
         <tr>
           <th>ID</th>
@@ -41,7 +41,6 @@
           <th>最低价格</th>
           <th>NPC收购价</th>
           <th>数量</th>
-          <th>分类</th>
           <th>最后更新</th>
         </tr>
       </thead>
@@ -62,6 +61,25 @@
     </table>
   </div>
 </div>
+
+<script>
+var criteria = {
+  {% if item_ids %}
+  item_ids: {{ item_ids }},
+  {% elif cls %}
+  cls: '{{ cls }}',
+  {% endif %}
+
+  realm: '{{ realm.name }}',
+  faction: '{{ faction.id }}'
+};
+
+  
+$(document).ready(function() {
+  loadPrices(criteria);
+});
+</script>
+<script src="/static/js/price.js"></script>
 
 
 {% endblock %}
