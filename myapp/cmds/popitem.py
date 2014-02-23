@@ -2,7 +2,7 @@
 
 import json
 from myapp.core.api import WowApi
-from myapp.core.db import get_all_item_ids, get_queued_item_ids, populate_item
+from myapp.core.db import get_all_item_ids, get_queued_item_ids, populate_item, classify_item
 
 
 
