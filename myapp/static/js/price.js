@@ -14,25 +14,30 @@ function loadPrices(criteria) {
 
   } else {
 
-    var params = { cls: criteria.cls };
+    var params = {};
+    if (criteria.cls) params.cls = criteria.cls;
     if (criteria.keyword) params.k = criteria.keyword;
     if (criteria.quality) params.q = criteria.quality;
     if (criteria.sort) params.s = criteria.sort;
     if (criteria.page) params.p = criteria.page;
 
-    var qss = [];
-    for (var k in params) {
-      qss.push(k + "=" + encodeURIComponent(params[k]));
-    }
+    if (!$.isEmptyObject(params)) {
 
-    var qs = qss.join('&');
-    var api = apiBase + 'prices_search' + (qs ? ('?' + qs) : '');
-    
-    $.get(api, function(res) {
-      if (!res.error) {
-        renderItems(res.items);
+      var qss = [];
+      for (var k in params) {
+        qss.push(k + "=" + encodeURIComponent(params[k]));
       }
-    });
+
+      var qs = qss.join('&');
+      var api = apiBase + 'prices_search' + (qs ? ('?' + qs) : '');
+      
+      $.get(api, function(res) {
+        if (!res.error) {
+          renderItems(res.items);
+        }
+      });
+
+    }
 
   }
 
