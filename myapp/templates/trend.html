@@ -1,6 +1,12 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
+
+
+<div class="search">
+  <input type="text" placeholder="搜索" id="search-box">
+</div>
+
 <h2>{{ realm.name }} - {{ faction.name }}</h2>
 
 <div class="row">
@@ -45,18 +51,8 @@
         </tr>
       </thead>
 
-      {% for item in items %}
-      <tr>
-        <td>{{ item.id }}</td>
-        <td><a href="http://db.178.com/wow/cn/item/{{ item.id }}.html" class="q{{ item.quality }}">{{ item.name }}</a></td>
-        <td class="numbers">{{ item.average|pretty_price }}</td>
-        <td class="numbers">{{ item.min_price|pretty_price }}</td>
-        <td class="numbers">{{ item.sell_price|pretty_price }}</td>
-        <td class="numbers">{{ item.quantity }}</td>
-        <td>{{ item.itemClass }} - {{ item.itemSubClass }}</td>
-        <td>{{ item.lastUpdate }}</td>
-      </tr>
-      {% endfor %}
+      <tbody>
+      </tbody>
 
     </table>
   </div>
@@ -77,6 +73,18 @@ var criteria = {
   
 $(document).ready(function() {
   loadPrices(criteria);
+
+  var search = function() {
+    criteria.keyword = $("#search-box").val();
+    delete criteria['tem_ids'];
+
+    loadPrices(criteria);
+  };
+
+  $("#search-box").keypress(function(e) {
+    if (e.keyCode == 13) search();
+  }).blur(search);
+
 });
 </script>
 <script src="/static/js/price.js"></script>
