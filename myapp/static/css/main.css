@@ -24,6 +24,10 @@ a:hover {
 .q4 { color: #a335ee !important; }
 .q5 { color: #ff8000 !important; }
 
+.search {
+  float: right;
+}
+
 
 .items-table {
   width: 100%;

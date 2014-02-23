@@ -46,6 +46,7 @@ function loadPrices(criteria) {
 
 function renderItems(items) {
 
+  $("#items-table tbody").empty();
   $.each(items, function(idx, item) {
     var row = $("<tr>");
     $("<td>").html(item.id).appendTo(row);
@@ -58,7 +59,7 @@ function renderItems(items) {
     $("<td>").html(item.quantity).addClass('numbers').appendTo(row);
     $("<td>").html(item.lastUpdate).appendTo(row);
 
-    $("#items-table").append(row);
+    $("#items-table tbody").append(row);
   });
 
 }
@@ -79,3 +80,5 @@ function prettyPrice(price) {
 
   return ret;
 }
+
+
