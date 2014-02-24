@@ -85,9 +85,54 @@ $(document).ready(function() {
     if (e.keyCode == 13) search();
   }).blur(search);
 
+
+  // tooltip layer
+  var tooltip = {
+
+    _tooltip: null,
+    _tooltipTimer: null,
+
+    show: function(content, pos) {
+      if (this._tooltip) {
+        this._tooltip.html(content).css(pos);
+        var offsetY = this._tooltip.height() + pos.top - $(document).height();
+        if (offsetY > 0) { this._tooltip.css({ top: pos.top - offsetY, left: pos.left }); }
+        this._tooltip.show();
+      }
+    },
+
+    hide: function() {
+      if (this._tooltip) this._tooltip.hide();
+    },
+
+    init: function() {
+      this._tooltip = $("<div>").addClass("item-tooltip").appendTo("body");
+
+      // show tooltip on hover
+      var root = this;
+
+      $("#items-table").delegate("a.itemlink", "mouseover", function(e) {
+
+        var pos = { left: e.pageX, top: e.pageY };
+
+        root._tooltipTimer = setTimeout(function() {
+          TOOLTIP.get($(e.target).attr("itemId"), function(item) {
+            root.show(item.tip, pos);
+          });
+        }, 500);
+      }).delegate("a.itemlink", "mouseout", function() {
+        root.hide();
+        clearTimeout(root._tooltipTimer);
+      });
+    }
+  };
+
+  tooltip.init();
+  
 });
 </script>
 <script src="/static/js/price.js"></script>
+<script src="/static/js/tooltip.js"></script>
 
 
 {% endblock %}

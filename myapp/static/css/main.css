@@ -95,22 +95,41 @@ a:hover {
   padding-left: 20px;
 }
 
-.money-gold, .money-silver, .money-copper {
+.money_g, .money_s, .money_c {
   padding-right: 15px;
   padding-left: 4px;
   background: no-repeat right center;
 }
 
-.money-gold {
+.money_g {
   background-image: url(/static/img/money-gold.gif);
 }
 
-.money-silver {
+.money_s {
   padding-right: 15px;
   background-image: url(/static/img/money-silver.gif);
 }
 
-.money-copper {
+.money_c {
   padding-right: 15px;
   background-image: url(/static/img/money-copper.gif);
+}
+
+.item-tooltip {
+  display: none;
+  position: absolute;
+  font-size: 14px;
+  background: rgba(0, 0, 30, .85);
+  border-top: solid 1px #888;
+  border-right: solid 1px #888;
+  border-left: solid 1px #555;
+  border-bottom: solid 1px #555;
+  border-radius: 3px;
+  top: 0;
+  left: 0;
+  padding: 8px 9px;
+}
+
+.item-tooltip h2 {
+  font-size: 14px;
 }

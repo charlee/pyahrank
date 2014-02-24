@@ -51,7 +51,11 @@ function renderItems(items) {
     var row = $("<tr>");
     $("<td>").html(item.id).appendTo(row);
     $("<td>").append(
-      $("<a>").attr("href", "http://db.178.com/wow/cn/item/" + item.id + ".html").addClass("q" + item.quality).html(item.name)
+      $("<a>").addClass("itemlink").attr({
+        href: "http://db.178.com/wow/cn/item/" + item.id + ".html",
+        itemId: item.id,
+        target: '_blank'
+      }).addClass("q" + item.quality).html(item.name)
     ).appendTo(row);
     $("<td>").append(prettyPrice(item.average)).addClass('numbers').appendTo(row);
     $("<td>").append(prettyPrice(item.min_price)).addClass('numbers').appendTo(row);
@@ -74,9 +78,9 @@ function prettyPrice(price) {
       c = Math.floor(price % 100);
 
   var ret = $('<span>');;
-  if (g) $("<span>").addClass("money-gold").html(g).appendTo(ret);
-  if (s) $("<span>").addClass("money-silver").html(s).appendTo(ret);
-  $("<span>").addClass("money-copper").html(c).appendTo(ret);;
+  if (g) $("<span>").addClass("money_g").html(g).appendTo(ret);
+  if (s) $("<span>").addClass("money_s").html(s).appendTo(ret);
+  $("<span>").addClass("money_c").html(c).appendTo(ret);;
 
   return ret;
 }
