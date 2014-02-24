@@ -63,6 +63,10 @@ a:hover {
   text-align: right;
 }
 
+.item-classes {
+  margin-bottom: 8px;
+}
+
 .item-classes ul {
   list-style-type: none;
   margin: 0;

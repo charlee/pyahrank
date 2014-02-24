@@ -72,10 +72,19 @@ def price_search(realm_name, faction_id, class_tag):
 
   item_classes = get_item_classes()
 
+  cls_tag = class_tag[1:]
+  (cls_id, subcls_id) = parse_classinfo(cls_tag)
+  
+  cls_name = item_classes[cls_id]['name'] if cls_id else None
+  subcls_name = item_classes[cls_id][subcls_id] if cls_id and subcls_id else None
+
   context = make_context({
     'realm': realm,
     'faction': faction,
-    'cls': class_tag[1:],
+    'cls_tag': class_tag[1:],
+    'cls_id': cls_id,
+    'cls_name': cls_name,
+    'subcls_name': subcls_name,
     'item_classes': format_item_classes(item_classes),
   })
 

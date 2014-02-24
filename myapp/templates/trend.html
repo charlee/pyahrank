@@ -4,7 +4,16 @@
 
 
 <div class="search">
-  <input type="text" placeholder="搜索" id="search-box">
+  {% if cls_name %}
+    {% if subcls_name %}
+      <input type="text" placeholder="搜索{{ cls_name }}-{{ subcls_name }}" id="search-box">
+    {% else %}
+      <input type="text" placeholder="搜索{{ cls_name }}" id="search-box">
+    {% endif %}
+  {% elif not item_ids %}
+    <input type="text" placeholder="搜索全部" id="search-box">
+  {% endif %}
+
 </div>
 
 <h2>{{ realm.name }} - {{ faction.name }}</h2>
@@ -12,13 +21,40 @@
 <div class="row">
   <div class="col-md-3">
 
+    <div class="item-classes" id="item-all">
+    <ul>
+      <li><a href="/s/{{ realm.name }}/{{ faction.id }}/">全部</a></li>
+    </ul>
+    </div>
+
+    <div class="item-classes" id="item-useful">
+    <ul>
+      <li data-toggle="collapse" data-target="#item-useful-list">常用物品</li>
+      <ul class="collapse in" id="item-useful-list">
+        <li><a href="/p/{{ realm.name }}/{{ faction.id }}/72988,53010,33470,21877,14047,4338,4306,2592,2589">布料</a></li>
+        <li><a href="/p/{{ realm.name }}/{{ faction.id }}/72163,72162,72120,33568">皮革</a></li>
+        <li><a href="/p/{{ realm.name }}/{{ faction.id }}/82446,41600,54444,54443,41599,21841">背包</a></li>
+        <li><a href="/p/{{ realm.name }}/{{ faction.id }}/72092,72096,72094,72103,72095,72104,72093,52185,52186,53039,53038,54849">金属与矿石</a></li>
+        <li><a href="/p/{{ realm.name }}/{{ faction.id }}/72238,79011,79010,72235,72234,72237">草药</a></li>
+        <li><a href="/p/{{ realm.name }}/{{ faction.id }}/74248,74247,74252,74250,74251,74249,52722,52721,52720,52719,52718,52555">附魔材料</a></li>
+        <li><a href="/p/{{ realm.name }}/{{ faction.id }}/76131,76138,76142,76141,76139,76140,76132,76130,76137,76133,76134,76135,76136,72092,72093">珠宝原石</a></li>
+        <li><a href="/p/{{ realm.name }}/{{ faction.id }}/90046,83764,83765,83763,82444,82445,87560,83007,83006,87559,74728,74724,74726,74723">装备强化</a></li>
+        <li><a href="/p/{{ realm.name }}/{{ faction.id }}/82453,34061,65891,41508,67151,52200,72146,95416,87251,83089,83087,83090,83088,87250">坐骑</a></li>
+      </ul>
+    </ul>
+    </div>
+
     <div class="item-classes" id="item-classes">
     <ul>
     {% for cls in item_classes %}
       <li data-toggle="collapse" data-target="#item-class-{{ cls.id }}">
         <a href="/s/{{ realm.name }}/{{ faction.id }}/{{ cls.id }}">{{ cls.name }}</a>
       </li>
+      {% if cls.id == cls_id %}
+      <ul class="collapse in" id="item-class-{{ cls.id }}">
+      {% else %}
       <ul class="collapse" id="item-class-{{ cls.id }}">
+      {% endif %}
       {% for subcls in cls.subclasses %}
         <li><a href="/s/{{ realm.name }}/{{ faction.id }}/{{ cls.id }}.{{ subcls.id }}">{{ subcls.name }}</a></li>
       {% endfor %}
@@ -27,13 +63,6 @@
     </ul>
     </div>
 
-    <p>常用物品</p>
-    <ul>
-      <li><a href="/p/{{ realm.name }}/{{ faction.id }}/72988,53010,33470,21877,14047,4338,4306,2592,2589">布料</a></li>
-      <li><a href="/p/{{ realm.name }}/{{ faction.id }}/72092,72096,72094,72103,72095,72104,52185,52186,53039,53038,54849">金属与矿石</a></li>
-      <li><a href="/p/{{ realm.name }}/{{ faction.id }}/72238,79011,79010,72235,72234,72237">草药</a></li>
-      <li><a href="/p/{{ realm.name }}/{{ faction.id }}/74248,74247,74252,74250,74251,74249">附魔材料</a></li>
-    </ul>
   </div>
 
   <div class="col-md-9">
@@ -62,8 +91,8 @@
 var criteria = {
   {% if item_ids %}
   item_ids: {{ item_ids }},
-  {% elif cls %}
-  cls: '{{ cls }}',
+  {% elif cls_tag %}
+  cls: '{{ cls_tag }}',
   {% endif %}
 
   realm: '{{ realm.name }}',
