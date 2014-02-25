@@ -122,7 +122,7 @@ def classify_item(item):
   Put specified item to corresponding item list
   """
 
-  if item['itemClass'].isdigit() and item['itemSubClass'].isdigit():
+  if str(item['itemClass']).isdigit() and str(item['itemSubClass']).isdigit():
     key = _key('items:class:%s.%s', item['itemClass'], item['itemSubClass'])
     rds.sadd(key, '%s:%s:%s' % (item['id'], item['name'], item['quality']))
     
