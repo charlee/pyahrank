@@ -170,10 +170,12 @@ def search_items(cls_id=None, subcls_id=None, item_range=None, keyword=None, qua
   elif sort[1:] == 'quality':
     item_idx.sort(key=lambda x:x[2], reverse=reverse_sort)
 
+  total = len(item_idx)
+
   if item_range is not None:
     item_idx = item_idx[item_range[0]:(item_range[0]+item_range[1])]
 
   # get items
   item_ids = map(lambda x:x[0], item_idx)
 
-  return item_ids
+  return (total, item_ids)

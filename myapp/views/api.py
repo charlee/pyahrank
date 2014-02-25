@@ -35,12 +35,19 @@ def prices_search(realm_name, faction_id):
   quality = request.args.get('q', None)
 
   if cls_id is None and keyword is None and quality is None:
+    total = 0
     results = []
+    rng = (0, 0)
   else:
-    item_ids = search_items(cls_id, subcls_id, ((int(page) - 1) * PAGESIZE, PAGESIZE), keyword, sort)
+    (total, item_ids) = search_items(cls_id, subcls_id, ((int(page) - 1) * PAGESIZE, PAGESIZE), keyword, sort)
     results = get_prices(realm['id'], faction['id'], item_ids)
+    start = (int(page) - 1) * PAGESIZE + 1
+    end = start + PAGESIZE - 1
+    if end > total:
+      end = total
+    rng = (start, end)
 
-  return jsonify(items=results)
+  return jsonify(items=results, total=total, range=rng)
 
 
 

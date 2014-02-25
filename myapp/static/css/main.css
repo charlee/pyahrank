@@ -17,6 +17,8 @@ a:hover {
   text-decoration: underline;
 }
 
+h2 { font-size: 16px; }
+
 .q0 { color: #9d9d9d !important; }
 .q1 { color: #fff !important; }
 .q2 { color: #1eff00 !important; }
@@ -24,10 +26,13 @@ a:hover {
 .q4 { color: #a335ee !important; }
 .q5 { color: #ff8000 !important; }
 
-.search {
-  float: right;
+.paginator {
+  margin-left: 20px;
 }
 
+.paginator .page-link {
+  margin-left: 10px;
+}
 
 .items-table {
   width: 100%;
