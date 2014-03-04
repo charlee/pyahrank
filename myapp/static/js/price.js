@@ -53,7 +53,9 @@
     $("#items-table tbody").empty();
     $.each(items, function(idx, item) {
       var row = $("<tr>");
-      $("<td>").html(item.id).appendTo(row);
+      $("<td>").append(
+        $("<a>").attr({ href: "/i/" + currentCriteria.realm + "/" + currentCriteria.faction + "/" + item.id }).html(item.id)
+      ).appendTo(row);
       $("<td>").append(
         $("<a>").addClass("itemlink").attr({
           href: "http://db.178.com/wow/cn/item/" + item.id + ".html",

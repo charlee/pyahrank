@@ -1,0 +1,11 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<h2>{{ realm.name }} - {{ faction.name }}</h2>
+
+<h3 class="q{{ item.quality}}">{{ item.name }}</h3>
+
+{{ prices }}
+
+{% endblock %}

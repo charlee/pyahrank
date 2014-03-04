@@ -2,7 +2,7 @@
 
 from flask import render_template, session
 from myapp import app
-from myapp.core.db import get_realms, get_all_item_ids, get_item, get_latest_price, get_item_classes, get_realm_by_name
+from myapp.core.db import get_realms, get_all_item_ids, get_item, get_latest_price, get_item_classes, get_realm_by_name, get_all_prices
 from myapp.utils.common import make_context, check_faction, parse_classinfo
 from datetime import datetime
 from pytz import timezone
@@ -111,3 +111,33 @@ def format_item_classes(item_classes):
     ret.append(cls)
 
   return ret
+
+
+
+@app.route('/i/<realm_name>/<faction_id>/<int:item_id>')
+def item_trend(realm_name, faction_id, item_id):
+
+  realm = get_realm_by_name(realm_name)
+  if realm is None:
+    return _error(u"未找到服务器!")
+
+  faction = check_faction(faction_id)
+
+  if faction is None:
+    return _error(u"阵营错误!")
+
+  item = get_item(item_id)
+
+  if not item:
+    return _error(u"物品未找到!")
+
+  prices = get_all_prices(realm['id'], faction['id'], item['id'])
+
+  context = make_context({
+    'realm': realm,
+    'faction': faction,
+    'item': item,
+    'prices': prices,
+  })
+
+  return render_template('item.html', **context)
