@@ -68,7 +68,16 @@ def add_price(realm_id, faction, item_id, timestamp, qty, avg, min_price):
 
 def get_all_prices(realm_id, faction, item_id):
   key = _key('price:%s:%s:%s', realm_id, faction, item_id)
-  return rds.lrange(key, 0, -1)
+  prices = rds.lrange(key, 0, -1)
+  result = []
+  for price in prices:
+    if price:
+      (timestamp, qty, avg, min_price) = price.split(':')
+      result.append((int(timestamp), int(qty), int(avg), int(min_price)))
+    else:
+      result.append((0, 0, 0, 0))
+
+  return result
 
 def get_latest_price(realm_id, faction, item_id):
   key = _key('price:%s:%s:%s', realm_id, faction, item_id)

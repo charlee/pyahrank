@@ -1,5 +1,6 @@
 
 from myapp import app
+import json
 
 def pretty_price(value):
   value = int(value)
@@ -15,6 +16,9 @@ def pretty_price(value):
   return value
 
 
+def tojson(value):
+  return json.dumps(value)
+
 # add template filters
 app.jinja_env.filters['pretty_price'] = pretty_price
-
+app.jinja_env.filters['json'] = tojson
